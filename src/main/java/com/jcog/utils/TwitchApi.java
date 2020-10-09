@@ -1,32 +1,27 @@
 package com.jcog.utils;
 
-import com.github.twitch4j.TwitchClient;
-import com.github.twitch4j.TwitchClientBuilder;
+import com.github.twitch4j.helix.TwitchHelix;
+import com.github.twitch4j.helix.TwitchHelixBuilder;
 import com.github.twitch4j.helix.domain.*;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import java.util.*;
 
 public class TwitchApi {
-    private final TwitchClient twitchClient;
+    private final TwitchHelix helixClient;
     private final String streamer;
     private final String authToken;
 
     public TwitchApi(String streamer, String authToken, String clientId) {
         this.streamer = streamer;
         this.authToken = authToken;
-        twitchClient = TwitchClientBuilder.builder()
-                .withEnableHelix(true)
+        helixClient = TwitchHelixBuilder.builder()
                 .withClientId(clientId)
                 .build();
     }
 
-    public void close() {
-        twitchClient.close();
-    }
-
     public Clip getClipById(String id) throws HystrixRuntimeException {
-        ClipList clipList = twitchClient.getHelix().getClips(
+        ClipList clipList = helixClient.getClips(
                 authToken,
                 null,
                 null,
@@ -44,7 +39,7 @@ public class TwitchApi {
     }
 
     public Follow getFollow(String fromId, String toId) throws HystrixRuntimeException {
-        FollowList followList = twitchClient.getHelix().getFollowers(
+        FollowList followList = helixClient.getFollowers(
                 authToken,
                 fromId,
                 toId,
@@ -58,7 +53,7 @@ public class TwitchApi {
     }
 
     public int getFollowerCount(String userId) throws HystrixRuntimeException {
-        FollowList followList = twitchClient.getHelix().getFollowers(
+        FollowList followList = helixClient.getFollowers(
                 authToken,
                 null,
                 userId,
@@ -73,7 +68,7 @@ public class TwitchApi {
         List<Follow> followsOutput = new ArrayList<>();
 
         do {
-            FollowList followList = twitchClient.getHelix().getFollowers(
+            FollowList followList = helixClient.getFollowers(
                     authToken,
                     null,
                     userId,
@@ -87,7 +82,7 @@ public class TwitchApi {
     }
 
     public Game getGameById(String gameId) throws HystrixRuntimeException {
-        GameList gameList = twitchClient.getHelix().getGames(
+        GameList gameList = helixClient.getGames(
                 authToken,
                 Collections.singletonList(gameId),
                 null
@@ -103,7 +98,7 @@ public class TwitchApi {
         List<Moderator> modsOutput = new ArrayList<>();
 
         do {
-            ModeratorList moderatorList = twitchClient.getHelix().getModerators(
+            ModeratorList moderatorList = helixClient.getModerators(
                     authToken,
                     userId,
                     null,
@@ -116,7 +111,7 @@ public class TwitchApi {
     }
 
     public Stream getStream() throws HystrixRuntimeException {
-        StreamList streamList = twitchClient.getHelix().getStreams(
+        StreamList streamList = helixClient.getStreams(
                 authToken,
                 "",
                 "",
@@ -136,7 +131,7 @@ public class TwitchApi {
         List<Subscription> subscriptionsOutput = new ArrayList<>();
 
         do {
-            SubscriptionList subscriptionList = twitchClient.getHelix().getSubscriptions(
+            SubscriptionList subscriptionList = helixClient.getSubscriptions(
                     authToken,
                     userId,
                     cursor,
@@ -150,7 +145,7 @@ public class TwitchApi {
     }
 
     public User getUserById(String userId) throws HystrixRuntimeException {
-        UserList userList = twitchClient.getHelix().getUsers(
+        UserList userList = helixClient.getUsers(
                 authToken,
                 Collections.singletonList(userId),
                 null
@@ -162,7 +157,7 @@ public class TwitchApi {
     }
 
     public User getUserByUsername(String username) throws HystrixRuntimeException {
-        UserList userList = twitchClient.getHelix().getUsers(
+        UserList userList = helixClient.getUsers(
                 authToken,
                 null,
                 Collections.singletonList(username)
@@ -181,7 +176,7 @@ public class TwitchApi {
             while (usersHundred.size() < 100 && iterator.hasNext()) {
                 usersHundred.add(iterator.next());
             }
-            UserList resultList = twitchClient.getHelix().getUsers(
+            UserList resultList = helixClient.getUsers(
                     authToken,
                     usersHundred,
                     null
@@ -200,7 +195,7 @@ public class TwitchApi {
             while (usersHundred.size() < 100 && iterator.hasNext()) {
                 usersHundred.add(iterator.next());
             }
-            UserList resultList = twitchClient.getHelix().getUsers(
+            UserList resultList = helixClient.getUsers(
                     authToken,
                     null,
                     usersHundred
@@ -212,7 +207,7 @@ public class TwitchApi {
     }
 
     public Video getVideoById(String videoId) throws HystrixRuntimeException {
-        VideoList videoList = twitchClient.getHelix().getVideos(
+        VideoList videoList = helixClient.getVideos(
                 authToken,
                 videoId,
                 null,
