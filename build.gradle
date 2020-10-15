@@ -9,7 +9,7 @@ allprojects {
     }
 }
 
-version '1.2.1'
+version '1.2.2'
 
 repositories {
     mavenCentral()
@@ -20,4 +20,5 @@ dependencies {
     implementation group: 'com.github.twitch4j', name: 'twitch4j', version: '1.1.2'
     implementation group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.25'
     implementation group: 'org.mongodb', name: 'mongodb-driver-sync', version: '4.1.0'
+    implementation group: 'com.github.gikkman', name: 'Java-Twirk', version: '0.6.2'
 }
