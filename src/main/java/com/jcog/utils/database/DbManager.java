@@ -17,6 +17,7 @@ public class DbManager {
     private final EmoteStatsDb emoteStatsDb;
     private final FfzEmoteStatsDb ffzEmoteStatsDb;
 
+    private final BitWarDb bitWarDb;
     private final CommandDb commandDb;
     private final MinecraftUserDb minecraftUserDb;
     private final QuoteDb quoteDb;
@@ -36,6 +37,7 @@ public class DbManager {
         emoteStatsDb = new EmoteStatsDb(gbDatabase);
         ffzEmoteStatsDb = new FfzEmoteStatsDb(gbDatabase);
 
+        bitWarDb = new BitWarDb(gbDatabase);
         commandDb = new CommandDb(gbDatabase);
         minecraftUserDb = new MinecraftUserDb(gbDatabase);
         quoteDb = new QuoteDb(gbDatabase);
@@ -63,6 +65,10 @@ public class DbManager {
 
     public FfzEmoteStatsDb getFfzEmoteStatsDb() {
         return ffzEmoteStatsDb;
+    }
+
+    public BitWarDb getBitWarDb() {
+        return bitWarDb;
     }
 
     public CommandDb getCommandDb() {
