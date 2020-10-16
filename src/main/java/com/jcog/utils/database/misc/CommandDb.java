@@ -39,7 +39,7 @@ public class CommandDb extends GbCollection {
                 .append(PERMISSION_KEY, userLevel.value);
         insertOne(document);
         return String.format(
-                "Successfully added \"%s\" to the list of commands with cooldown %d ms and user level \"%s\".",
+                "Successfully added \"%s\" to the list of commands with cooldown %ds and user level \"%s\".",
                 id,
                 cooldown,
                 userLevel.toString()
@@ -57,7 +57,7 @@ public class CommandDb extends GbCollection {
                 .append(PERMISSION_KEY, userLevel.value);
         updateOne(id, document);
         return String.format(
-                "Successfully edited command message for \"%s\", set cooldown to %d ms, and set user level to \"%s\".",
+                "Successfully edited command message for \"%s\", set cooldown to %ds, and set user level to \"%s\".",
                 id,
                 cooldown,
                 userLevel.toString()
@@ -75,7 +75,7 @@ public class CommandDb extends GbCollection {
                 .append(COOLDOWN_KEY, cooldown);
         updateOne(id, document);
         return String.format(
-                "Successfully edited command message for \"%s\" and set cooldown to %d ms.",
+                "Successfully edited command message for \"%s\" and set cooldown to %ds.",
                 id,
                 cooldown
         );
@@ -109,7 +109,7 @@ public class CommandDb extends GbCollection {
                 .append(PERMISSION_KEY, userLevel.value);
         updateOne(id, document);
         return String.format(
-                "Successfully edited \"%s\": set cooldown to %d ms and set user level to \"%s\".",
+                "Successfully edited \"%s\": set cooldown to %ds and set user level to \"%s\".",
                 id,
                 cooldown,
                 userLevel.toString()
@@ -136,7 +136,7 @@ public class CommandDb extends GbCollection {
         Document document = new Document(ID_KEY, id)
                 .append(COOLDOWN_KEY, cooldown);
         updateOne(id, document);
-        return String.format("Successfully edited \"%s\": set cooldown to %d ms.", id, cooldown);
+        return String.format("Successfully edited \"%s\": set cooldown to %ds.", id, cooldown);
     }
 
     public String editCommand(String id, TwitchUserLevel.USER_LEVEL userLevel) {
