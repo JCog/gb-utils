@@ -17,7 +17,7 @@ public class CommandDb extends GbCollection {
     private static final String COUNT_KEY = "count";
     private static final String COOLDOWN_KEY = "cooldown";
 
-    private final static long DEFAULT_COOLDOWN = 2 * 1000;
+    private final static long DEFAULT_COOLDOWN = 2; // seconds
 
     public CommandDb(GbDatabase gbDatabase) {
         super(gbDatabase);
