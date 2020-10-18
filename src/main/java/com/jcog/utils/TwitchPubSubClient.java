@@ -35,6 +35,10 @@ public abstract class TwitchPubSubClient {
         client.getEventManager().onEvent(ChannelSubGiftEvent.class, this::onSubGiftsEvent);
         return this;
     }
+    
+    public void close() {
+        client.close();
+    }
 
     public abstract void onBitsEvent(ChannelBitsEvent event);
 
