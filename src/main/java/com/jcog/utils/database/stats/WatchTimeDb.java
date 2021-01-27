@@ -34,8 +34,12 @@ public class WatchTimeDb extends GbCollection {
             idLong = Long.parseLong(id);
         }
         catch (NumberFormatException nfe) {
-            System.out.println(String.format("Error: ID \"%s\" (%s, %d minutes) cannot be parsed into long",
-                    id, name, minutes));
+            System.out.println(String.format(
+                    "Error: ID \"%s\" (%s, %d minutes) cannot be parsed into long",
+                    id,
+                    name,
+                    minutes
+            ));
             return;
         }
         Document result = findFirstEquals(ID_KEY, idLong);
@@ -117,7 +121,7 @@ public class WatchTimeDb extends GbCollection {
         if (result != null) {
             return result.getDate(FIRST_SEEN_KEY);
         }
-        return getDate();
+        return null;
     }
 
     public Date getFirstSeenById(long userId) {
@@ -125,7 +129,7 @@ public class WatchTimeDb extends GbCollection {
         if (result != null) {
             return result.getDate(FIRST_SEEN_KEY);
         }
-        return getDate();
+        return null;
     }
 
     public Date getLastSeenByUsername(String username) {
@@ -135,7 +139,7 @@ public class WatchTimeDb extends GbCollection {
         if (result != null) {
             return result.getDate(LAST_SEEN_KEY);
         }
-        return getDate();
+        return null;
     }
 
     public Date getLastSeenById(long id) {
@@ -143,12 +147,12 @@ public class WatchTimeDb extends GbCollection {
         if (result != null) {
             return result.getDate(LAST_SEEN_KEY);
         }
-        return getDate();
+        return null;
     }
 
-    public ArrayList<Map.Entry<String, Integer>> getTopUsers() {
+    public ArrayList<Map.Entry<String,Integer>> getTopUsers() {
         MongoCursor<Document> result = findAll().sort(Sorts.descending(MINUTES_KEY)).iterator();
-        ArrayList<Map.Entry<String, Integer>> topUsers = new ArrayList<>();
+        ArrayList<Map.Entry<String,Integer>> topUsers = new ArrayList<>();
 
         while (result.hasNext()) {
             Document doc = result.next();
