@@ -2,11 +2,18 @@ package com.jcog.utils.database.misc;
 
 import com.jcog.utils.database.GbCollection;
 import com.jcog.utils.database.GbDatabase;
+import com.jcog.utils.database.entries.TattleItem;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.lang.Nullable;
 import org.bson.Document;
+
+import java.util.Random;
 
 public class TattleDb extends GbCollection {
     private static final String COLLECTION_NAME_KEY = "tattles";
     private static final String TATTLE_KEY = "tattle";
+
+    private final Random random = new Random();
 
     public TattleDb(GbDatabase gbDatabase) {
         super(gbDatabase);
@@ -29,13 +36,24 @@ public class TattleDb extends GbCollection {
         }
     }
 
-    public String getTattle(String twitchId) {
+    @Nullable
+    public TattleItem getTattle(String twitchId) {
         Document result = findFirstEquals(ID_KEY, twitchId);
         if (result == null) {
             return null;
         }
         else {
-            return (String) result.get(TATTLE_KEY);
+            return new TattleItem(result.getString(ID_KEY), result.getString(TATTLE_KEY));
         }
+    }
+
+    public TattleItem getRandomTattle() {
+        int index = random.nextInt((int) countDocuments());
+        MongoCursor<Document> iterator = findAll().iterator();
+        for (int i = 0; i < index; i++) {
+            iterator.next();
+        }
+        Document tattle = iterator.next();
+        return new TattleItem(tattle.getString(ID_KEY), tattle.getString(TATTLE_KEY));
     }
 }
