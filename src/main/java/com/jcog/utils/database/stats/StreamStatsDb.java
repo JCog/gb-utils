@@ -3,6 +3,7 @@ package com.jcog.utils.database.stats;
 import com.jcog.utils.database.GbCollection;
 import com.jcog.utils.database.GbDatabase;
 import org.bson.Document;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -45,7 +46,7 @@ public class StreamStatsDb extends GbCollection {
             Date startTime,
             Date endTime,
             List<Integer> viewerCounts,
-            HashMap<String, Integer> userMinutesMap
+            HashMap<String,Integer> userMinutesMap
     ) {
         String streamKey = getNewStreamKey();
         Document document = new Document(ID_KEY, streamKey)
@@ -54,13 +55,13 @@ public class StreamStatsDb extends GbCollection {
                 .append(VIEW_COUNTS_KEY, viewerCounts);
 
         List<Document> userList = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : userMinutesMap.entrySet()) {
+        for (Map.Entry<String,Integer> entry : userMinutesMap.entrySet()) {
             String username = entry.getKey();
             int minutes = entry.getValue();
             boolean newUser = watchTimeDb.getMinutesByUsername(username) == 0;
             userList.add(new Document(USERNAME_KEY, username)
-                    .append(MINUTES_KEY, minutes)
-                    .append(NEW_USER_KEY, newUser)
+                                 .append(MINUTES_KEY, minutes)
+                                 .append(NEW_USER_KEY, newUser)
             );
         }
         document.append(USER_LIST_KEY, userList);
@@ -89,6 +90,7 @@ public class StreamStatsDb extends GbCollection {
      *
      * @return start time
      */
+    @Nullable
     public Date getStreamStartTime() {
         String streamKey = getNewestStreamKey();
         Document result = findFirstEquals(ID_KEY, streamKey);
@@ -105,6 +107,7 @@ public class StreamStatsDb extends GbCollection {
      *
      * @return end time
      */
+    @Nullable
     public Date getStreamEndTime() {
         String streamKey = getNewestStreamKey();
         Document result = findFirstEquals(ID_KEY, streamKey);
@@ -120,10 +123,10 @@ public class StreamStatsDb extends GbCollection {
      *
      * @return user watch time map
      */
-    public HashMap<String, Integer> getUserMinutesList() {
+    public HashMap<String,Integer> getUserMinutesList() {
         String streamKey = getNewestStreamKey();
         List<Document> userListDocs = findFirstEquals(ID_KEY, streamKey).getList(USER_LIST_KEY, Document.class);
-        HashMap<String, Integer> userListMap = new HashMap<>();
+        HashMap<String,Integer> userListMap = new HashMap<>();
 
         for (Document userDoc : userListDocs) {
             String username = userDoc.getString(USERNAME_KEY);
@@ -205,6 +208,7 @@ public class StreamStatsDb extends GbCollection {
         return findFirstEquals(ID_KEY, streamKey).getList(VIEW_COUNTS_KEY, Integer.class);
     }
 
+    @Nullable
     private String getNewestStreamKey() {
         Document result = findFirstEquals(ID_KEY, NEWEST_ID);
         if (result != null) {

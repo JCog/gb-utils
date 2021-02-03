@@ -6,6 +6,7 @@ import com.jcog.utils.database.GbDatabase;
 import com.jcog.utils.database.entries.CommandItem;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -165,6 +166,7 @@ public class CommandDb extends GbCollection {
         }
     }
 
+    @Nullable
     public CommandItem getCommandItem(String id) {
         Document result = getCommand(id);
         if (result != null) {

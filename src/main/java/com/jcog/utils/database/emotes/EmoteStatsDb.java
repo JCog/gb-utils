@@ -6,6 +6,7 @@ import com.jcog.utils.database.GbDatabase;
 import com.jcog.utils.database.entries.EmoteItem;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -153,6 +154,7 @@ public class EmoteStatsDb extends GbCollection {
         return String.format("%d-%d", year, month);
     }
 
+    @Nullable
     private Document getUsageStats(List<Document> usageStats, String monthKeyValue) {
         for (Document document : usageStats) {
             if (document.getString(MONTH_KEY).equals(monthKeyValue)) {

@@ -1,6 +1,7 @@
 package com.jcog.utils.database.entries;
 
 import com.jcog.utils.TwitchUserLevel;
+import org.jetbrains.annotations.Nullable;
 
 public class CommandItem {
 
@@ -10,6 +11,7 @@ public class CommandItem {
     private final long cooldown;
     private final int count;
 
+    @Nullable
     public static TwitchUserLevel.USER_LEVEL getUserLevel(int permission) {
         switch (permission) {
             case 0:

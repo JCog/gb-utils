@@ -7,6 +7,7 @@ import com.jcog.utils.database.entries.WatchtimeItem;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -34,12 +35,12 @@ public class WatchTimeDb extends GbCollection {
             idLong = Long.parseLong(id);
         }
         catch (NumberFormatException nfe) {
-            System.out.println(String.format(
-                    "Error: ID \"%s\" (%s, %d minutes) cannot be parsed into long",
+            System.out.printf(
+                    "Error: ID \"%s\" (%s, %d minutes) cannot be parsed into long%n",
                     id,
                     name,
                     minutes
-            ));
+            );
             return;
         }
         Document result = findFirstEquals(ID_KEY, idLong);
@@ -72,6 +73,7 @@ public class WatchTimeDb extends GbCollection {
         }
     }
 
+    @Nullable
     public WatchtimeItem getWatchtimeItem(String id) {
         Document result = findFirstEquals(ID_KEY, id);
         if (result != null) {
@@ -114,6 +116,7 @@ public class WatchTimeDb extends GbCollection {
         return 0;
     }
 
+    @Nullable
     public Date getFirstSeenByUsername(String username) {
         String userLower = username.toLowerCase();
 
@@ -124,6 +127,7 @@ public class WatchTimeDb extends GbCollection {
         return null;
     }
 
+    @Nullable
     public Date getFirstSeenById(long userId) {
         Document result = findFirstEquals(ID_KEY, userId);
         if (result != null) {
@@ -132,6 +136,7 @@ public class WatchTimeDb extends GbCollection {
         return null;
     }
 
+    @Nullable
     public Date getLastSeenByUsername(String username) {
         String userLower = username.toLowerCase();
 
@@ -142,6 +147,7 @@ public class WatchTimeDb extends GbCollection {
         return null;
     }
 
+    @Nullable
     public Date getLastSeenById(long id) {
         Document result = findFirstEquals(ID_KEY, id);
         if (result != null) {

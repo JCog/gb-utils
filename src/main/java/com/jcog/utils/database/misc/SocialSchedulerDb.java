@@ -5,6 +5,7 @@ import com.jcog.utils.database.GbDatabase;
 import com.jcog.utils.database.entries.ScheduledMessage;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -65,6 +66,7 @@ public class SocialSchedulerDb extends GbCollection {
         return String.format("Successfully deleted scheduled message \"%s\".", id);
     }
 
+    @Nullable
     public ScheduledMessage getMessage(String id) {
         Document result = findFirstEquals(ID_KEY, id);
         if (result != null) {

@@ -4,6 +4,7 @@ import com.github.twitch4j.helix.TwitchHelix;
 import com.github.twitch4j.helix.TwitchHelixBuilder;
 import com.github.twitch4j.helix.domain.*;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -20,6 +21,7 @@ public class TwitchApi {
                 .build();
     }
 
+    @Nullable
     public Clip getClipById(String id) throws HystrixRuntimeException {
         ClipList clipList = helixClient.getClips(
                 authToken,
@@ -38,6 +40,7 @@ public class TwitchApi {
         return clipList.getData().get(0);
     }
 
+    @Nullable
     public Follow getFollow(String fromId, String toId) throws HystrixRuntimeException {
         FollowList followList = helixClient.getFollowers(
                 authToken,
@@ -81,6 +84,7 @@ public class TwitchApi {
         return followsOutput;
     }
 
+    @Nullable
     public Game getGameById(String gameId) throws HystrixRuntimeException {
         GameList gameList = helixClient.getGames(
                 authToken,
@@ -110,6 +114,7 @@ public class TwitchApi {
         return modsOutput;
     }
 
+    @Nullable
     public Stream getStream() throws HystrixRuntimeException {
         StreamList streamList = helixClient.getStreams(
                 authToken,
@@ -144,6 +149,7 @@ public class TwitchApi {
         return subscriptionsOutput;
     }
 
+    @Nullable
     public User getUserById(String userId) throws HystrixRuntimeException {
         UserList userList = helixClient.getUsers(
                 authToken,
@@ -156,6 +162,7 @@ public class TwitchApi {
         return userList.getUsers().get(0);
     }
 
+    @Nullable
     public User getUserByUsername(String username) throws HystrixRuntimeException {
         UserList userList = helixClient.getUsers(
                 authToken,
@@ -206,6 +213,7 @@ public class TwitchApi {
         return output;
     }
 
+    @Nullable
     public Video getVideoById(String videoId) throws HystrixRuntimeException {
         VideoList videoList = helixClient.getVideos(
                 authToken,

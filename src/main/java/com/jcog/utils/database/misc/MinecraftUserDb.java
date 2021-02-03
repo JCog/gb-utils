@@ -4,6 +4,7 @@ import com.jcog.utils.database.GbCollection;
 import com.jcog.utils.database.GbDatabase;
 import com.jcog.utils.database.entries.MinecraftUser;
 import org.bson.Document;
+import org.jetbrains.annotations.Nullable;
 
 public class MinecraftUserDb extends GbCollection {
     private static final String COLLECTION_NAME_KEY = "minecraft_users";
@@ -38,6 +39,7 @@ public class MinecraftUserDb extends GbCollection {
         return convertMinecraftUser(result);
     }
 
+    @Nullable
     private MinecraftUser convertMinecraftUser(Document userDoc) {
         if (userDoc == null) {
             return null;

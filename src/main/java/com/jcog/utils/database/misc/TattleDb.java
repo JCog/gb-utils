@@ -4,8 +4,8 @@ import com.jcog.utils.database.GbCollection;
 import com.jcog.utils.database.GbDatabase;
 import com.jcog.utils.database.entries.TattleItem;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.lang.Nullable;
 import org.bson.Document;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 

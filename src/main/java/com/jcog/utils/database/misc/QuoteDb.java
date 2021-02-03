@@ -4,6 +4,7 @@ import com.jcog.utils.database.GbCollection;
 import com.jcog.utils.database.GbDatabase;
 import com.jcog.utils.database.entries.QuoteItem;
 import org.bson.Document;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +49,7 @@ public class QuoteDb extends GbCollection {
         insertOne(document);
     }
 
+    @Nullable
     public QuoteItem getQuote(long index) {
         return convertQuoteDocument(findFirstEquals(ID_KEY, index));
     }
@@ -105,6 +107,7 @@ public class QuoteDb extends GbCollection {
         return String.format("ERROR: quote %d does not exist", index);
     }
 
+    @Nullable
     private QuoteItem convertQuoteDocument(Document quoteDoc) {
         if (quoteDoc == null) {
             return null;

@@ -1,6 +1,7 @@
 package com.jcog.utils;
 
 import com.gikk.twirk.types.users.TwitchUser;
+import org.jetbrains.annotations.Nullable;
 
 public class TwitchUserLevel {
     public enum USER_LEVEL {
@@ -72,6 +73,7 @@ public class TwitchUserLevel {
         }
     }
 
+    @Nullable
     public static USER_LEVEL getUserLevel(String type) {
         if (type.equals(USER_LEVEL.DEFAULT.toString())) {
             return USER_LEVEL.DEFAULT;
