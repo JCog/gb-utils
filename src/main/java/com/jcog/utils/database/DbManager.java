@@ -22,6 +22,7 @@ public class DbManager {
     private final MinecraftUserDb minecraftUserDb;
     private final QuoteDb quoteDb;
     private final SocialSchedulerDb socialSchedulerDb;
+    private final TattleDb tattleDb;
     private final ViewerQueueDb viewerQueueDb;
 
     private final SpeedySpinLeaderboardDb speedySpinLeaderboardDb;
@@ -42,6 +43,7 @@ public class DbManager {
         minecraftUserDb = new MinecraftUserDb(gbDatabase);
         quoteDb = new QuoteDb(gbDatabase);
         socialSchedulerDb = new SocialSchedulerDb(gbDatabase);
+        tattleDb = new TattleDb(gbDatabase);
         viewerQueueDb = new ViewerQueueDb(gbDatabase);
 
         speedySpinLeaderboardDb = new SpeedySpinLeaderboardDb(gbDatabase);
@@ -85,6 +87,10 @@ public class DbManager {
 
     public SocialSchedulerDb getSocialSchedulerDb() {
         return socialSchedulerDb;
+    }
+
+    public TattleDb getTattleDb() {
+        return tattleDb;
     }
 
     public ViewerQueueDb getViewerQueueDb() {
