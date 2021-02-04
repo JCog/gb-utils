@@ -28,12 +28,16 @@ public class QuoteDb extends GbCollection {
     }
 
     public String addQuote(String text, long creatorId, boolean approved) {
+        Date creationDate = new Date();
+        return addQuote(text, creatorId, creationDate, approved);
+    }
+
+    public String addQuote(String text, long creatorId, Date creationDate, boolean approved) {
         long quoteId = countDocuments() + 1;
-        Date created = new Date();
         Document document = new Document(ID_KEY, quoteId)
                 .append(TEXT_KEY, text)
                 .append(CREATOR_ID_KEY, creatorId)
-                .append(CREATED_KEY, created)
+                .append(CREATED_KEY, creationDate)
                 .append(APPROVED_KEY, approved);
         insertOne(document);
         return String.format("Successfully added quote %d", quoteId);
