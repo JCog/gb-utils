@@ -2,6 +2,7 @@ package com.jcog.utils.database;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -118,5 +119,19 @@ public abstract class GbCollection {
      */
     protected long countDocuments() {
         return collection.countDocuments();
+    }
+
+    /*
+    Sorts documents in iterable in ascending order by the sortField
+     */
+    protected FindIterable<Document> sortAscending(FindIterable<Document> iterable, String sortField) {
+        return iterable.sort(Sorts.ascending(sortField));
+    }
+
+    /*
+    Sorts documents in iterable in descending order by the sortField
+     */
+    protected FindIterable<Document> sortDescending(FindIterable<Document> iterable, String sortField) {
+        return iterable.sort(Sorts.descending(sortField));
     }
 }

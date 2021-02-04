@@ -39,6 +39,17 @@ public class QuoteDb extends GbCollection {
         return String.format("Successfully added quote %d", quoteId);
     }
 
+    public void reAddDeletedQuote(QuoteItem quote) {
+        for (Document nextQuote : sortDescending(findAll(), ID_KEY)) {
+            long oldId = nextQuote.getLong(ID_KEY);
+            if (oldId < quote.getIndex()) {
+                break;
+            }
+            updateOne(oldId, new Document(ID_KEY, oldId + 1));
+        }
+        addQuote(quote);
+    }
+
     //be careful with this in case of intersecting IDs
     private void addQuote(QuoteItem quote) {
         Document document = new Document(ID_KEY, quote.getIndex())
@@ -87,6 +98,18 @@ public class QuoteDb extends GbCollection {
         updateOne(index, new Document(CREATOR_ID_KEY, userId));
         updateOne(index, new Document(CREATED_KEY, new Date()));
         return String.format("Successfully edited quote %d", index);
+    }
+
+    public boolean editQuote(QuoteItem quote) {
+        if (findFirstEquals(ID_KEY, quote.getIndex()) == null) {
+            return false;
+        }
+
+        updateOne(quote.getIndex(), new Document(TEXT_KEY, quote.getText()));
+        updateOne(quote.getIndex(), new Document(CREATOR_ID_KEY, quote.getCreatorId()));
+        updateOne(quote.getIndex(), new Document(CREATED_KEY, quote.getCreated()));
+        updateOne(quote.getIndex(), new Document(APPROVED_KEY, quote.isApproved()));
+        return true;
     }
 
     public int getQuoteCount() {
