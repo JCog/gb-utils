@@ -49,6 +49,12 @@ public class QuoteDb extends GbCollection {
             if (oldId < quote.getIndex()) {
                 break;
             }
+            deleteOne(oldId);
+            addQuote(new QuoteItem(oldId + 1,
+                                   nextQuote.getString(TEXT_KEY),
+                                   nextQuote.getLong(CREATOR_ID_KEY),
+                                   nextQuote.getDate(CREATED_KEY),
+                                   nextQuote.getBoolean(APPROVED_KEY)));
             updateOne(oldId, new Document(ID_KEY, oldId + 1));
         }
         addQuote(quote);
@@ -97,29 +103,20 @@ public class QuoteDb extends GbCollection {
 
     @Nullable
     public QuoteItem editQuote(long index, String text, long userId, boolean approved) {
-        if (findFirstEquals(ID_KEY, index) == null) {
+        Document quoteToEdit = findFirstEquals(ID_KEY, index);
+        if (quoteToEdit == null) {
             return null;
         }
 
-        Date date = new Date();
         updateOne(index, new Document(TEXT_KEY, text));
         updateOne(index, new Document(CREATOR_ID_KEY, userId));
-        updateOne(index, new Document(CREATED_KEY, date));
         updateOne(index, new Document(APPROVED_KEY, approved));
-        return new QuoteItem(index, text, userId, date, approved);
+        return new QuoteItem(index, text, userId, quoteToEdit.getDate(CREATED_KEY), approved);
     }
 
     @Nullable
     public QuoteItem editQuote(QuoteItem quote) {
-        if (findFirstEquals(ID_KEY, quote.getIndex()) == null) {
-            return null;
-        }
-
-        updateOne(quote.getIndex(), new Document(TEXT_KEY, quote.getText()));
-        updateOne(quote.getIndex(), new Document(CREATOR_ID_KEY, quote.getCreatorId()));
-        updateOne(quote.getIndex(), new Document(CREATED_KEY, quote.getCreated()));
-        updateOne(quote.getIndex(), new Document(APPROVED_KEY, quote.isApproved()));
-        return quote;
+        return editQuote(quote.getIndex(), quote.getText(), quote.getCreatorId(), quote.isApproved());
     }
 
     public int getQuoteCount() {
