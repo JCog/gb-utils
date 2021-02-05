@@ -27,12 +27,12 @@ public class QuoteDb extends GbCollection {
         return COLLECTION_NAME_KEY;
     }
 
-    public String addQuote(String text, long creatorId, boolean approved) {
+    public QuoteItem addQuote(String text, long creatorId, boolean approved) {
         Date creationDate = new Date();
         return addQuote(text, creatorId, creationDate, approved);
     }
 
-    public String addQuote(String text, long creatorId, Date creationDate, boolean approved) {
+    public QuoteItem addQuote(String text, long creatorId, Date creationDate, boolean approved) {
         long quoteId = countDocuments() + 1;
         Document document = new Document(ID_KEY, quoteId)
                 .append(TEXT_KEY, text)
@@ -40,7 +40,7 @@ public class QuoteDb extends GbCollection {
                 .append(CREATED_KEY, creationDate)
                 .append(APPROVED_KEY, approved);
         insertOne(document);
-        return String.format("Successfully added quote %d", quoteId);
+        return convertQuoteDocument(document);
     }
 
     public void reAddDeletedQuote(QuoteItem quote) {
@@ -69,12 +69,14 @@ public class QuoteDb extends GbCollection {
         return convertQuoteDocument(findFirstEquals(ID_KEY, index));
     }
 
-    public String deleteQuote(long index) {
-        if (findFirstEquals(ID_KEY, index) != null) {
+    @Nullable
+    public QuoteItem deleteQuote(long index) {
+        Document quoteToDelete = findFirstEquals(ID_KEY, index);
+        if (quoteToDelete != null) {
             deleteOne(index);
         }
         else {
-            return getDoesNotExistString(index);
+            return null;
         }
 
         ArrayList<QuoteItem> replacements = new ArrayList<>();
@@ -90,30 +92,34 @@ public class QuoteDb extends GbCollection {
         for (QuoteItem quote : replacements) {
             addQuote(quote);
         }
-        return String.format("Successfully deleted quote %d", index);
+        return convertQuoteDocument(quoteToDelete);
     }
 
-    public String editQuote(long index, String text, long userId) {
+    @Nullable
+    public QuoteItem editQuote(long index, String text, long userId, boolean approved) {
         if (findFirstEquals(ID_KEY, index) == null) {
-            return getDoesNotExistString(index);
+            return null;
         }
 
+        Date date = new Date();
         updateOne(index, new Document(TEXT_KEY, text));
         updateOne(index, new Document(CREATOR_ID_KEY, userId));
-        updateOne(index, new Document(CREATED_KEY, new Date()));
-        return String.format("Successfully edited quote %d", index);
+        updateOne(index, new Document(CREATED_KEY, date));
+        updateOne(index, new Document(APPROVED_KEY, approved));
+        return new QuoteItem(index, text, userId, date, approved);
     }
 
-    public boolean editQuote(QuoteItem quote) {
+    @Nullable
+    public QuoteItem editQuote(QuoteItem quote) {
         if (findFirstEquals(ID_KEY, quote.getIndex()) == null) {
-            return false;
+            return null;
         }
 
         updateOne(quote.getIndex(), new Document(TEXT_KEY, quote.getText()));
         updateOne(quote.getIndex(), new Document(CREATOR_ID_KEY, quote.getCreatorId()));
         updateOne(quote.getIndex(), new Document(CREATED_KEY, quote.getCreated()));
         updateOne(quote.getIndex(), new Document(APPROVED_KEY, quote.isApproved()));
-        return true;
+        return quote;
     }
 
     public int getQuoteCount() {
