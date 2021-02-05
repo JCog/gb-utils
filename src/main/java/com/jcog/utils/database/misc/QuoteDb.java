@@ -111,7 +111,7 @@ public class QuoteDb extends GbCollection {
         updateOne(index, new Document(TEXT_KEY, text));
         updateOne(index, new Document(CREATOR_ID_KEY, userId));
         updateOne(index, new Document(APPROVED_KEY, approved));
-        return new QuoteItem(index, text, userId, quoteToEdit.getDate(CREATED_KEY), approved);
+        return convertQuoteDocument(quoteToEdit);
     }
 
     @Nullable
