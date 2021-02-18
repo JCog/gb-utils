@@ -125,10 +125,8 @@ public class QuoteDb extends GbCollection {
 
     public List<QuoteItem> searchQuotes(String query) {
         ArrayList<QuoteItem> output = new ArrayList<>();
-        for (Document quote : findAll()) {
-            if (quote.getString(TEXT_KEY).toLowerCase().contains(query.toLowerCase())) {
-                output.add(convertQuoteDocument(quote));
-            }
+        for (Document quote : findContainsSubstring(TEXT_KEY, query, false)) {
+            output.add(convertQuoteDocument(quote));
         }
         return output;
     }

@@ -5,8 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.exists;
+import static com.mongodb.client.model.Filters.*;
 import static java.lang.System.out;
 
 public abstract class GbCollection {
@@ -112,6 +111,18 @@ public abstract class GbCollection {
      */
     protected FindIterable<Document> findContainsKey(String key) {
         return collection.find(exists(key));
+    }
+
+    /*
+    Finds all documents in the collection who's value of key contains query as a substring
+     */
+    protected FindIterable<Document> findContainsSubstring(String key, String query, boolean caseSensitive) {
+        if (caseSensitive) {
+            return collection.find(regex(key, ".*" + query + ".*"));
+        }
+        else {
+            return collection.find(regex(key, ".*" + query + ".*", "i"));
+        }
     }
 
     /*
