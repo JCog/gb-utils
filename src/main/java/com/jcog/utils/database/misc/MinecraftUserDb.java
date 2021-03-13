@@ -3,8 +3,11 @@ package com.jcog.utils.database.misc;
 import com.jcog.utils.database.GbCollection;
 import com.jcog.utils.database.GbDatabase;
 import com.jcog.utils.database.entries.MinecraftUser;
+import com.mongodb.client.FindIterable;
 import org.bson.Document;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 public class MinecraftUserDb extends GbCollection {
     private static final String COLLECTION_NAME_KEY = "minecraft_users";
@@ -37,6 +40,15 @@ public class MinecraftUserDb extends GbCollection {
     public MinecraftUser getUser(String twitchId) {
         Document result = findFirstEquals(ID_KEY, twitchId);
         return convertMinecraftUser(result);
+    }
+    
+    public ArrayList<MinecraftUser> getAllUsers() {
+        FindIterable<Document> documents = findAll();
+        ArrayList<MinecraftUser> allUsers = new ArrayList<>();
+        for (Document document : documents) {
+            allUsers.add(convertMinecraftUser(document));
+        }
+        return allUsers;
     }
 
     @Nullable
