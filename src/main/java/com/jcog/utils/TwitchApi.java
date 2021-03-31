@@ -83,6 +83,24 @@ public class TwitchApi {
         } while (cursor != null);
         return followsOutput;
     }
+    
+    public List<Follow> getFollowList(String userId) throws HystrixRuntimeException {
+        String cursor = null;
+        List<Follow> followsOutput = new ArrayList<>();
+    
+        do {
+            FollowList followList = helixClient.getFollowers(
+                    authToken,
+                    userId,
+                    null,
+                    cursor,
+                    100
+            ).execute();
+            cursor = followList.getPagination().getCursor();
+            followsOutput.addAll(followList.getFollows());
+        } while (cursor != null);
+        return followsOutput;
+    }
 
     @Nullable
     public Game getGameById(String gameId) throws HystrixRuntimeException {
