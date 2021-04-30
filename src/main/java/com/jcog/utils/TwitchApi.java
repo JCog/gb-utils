@@ -10,11 +10,9 @@ import java.util.*;
 
 public class TwitchApi {
     private final TwitchHelix helixClient;
-    private final String streamer;
     private final String authToken;
 
-    public TwitchApi(String streamer, String authToken, String clientId) {
-        this.streamer = streamer;
+    public TwitchApi(String authToken, String clientId) {
         this.authToken = authToken;
         helixClient = TwitchHelixBuilder.builder()
                 .withClientId(clientId)
@@ -83,11 +81,11 @@ public class TwitchApi {
         } while (cursor != null);
         return followsOutput;
     }
-    
+
     public List<Follow> getFollowList(String userId) throws HystrixRuntimeException {
         String cursor = null;
         List<Follow> followsOutput = new ArrayList<>();
-    
+
         do {
             FollowList followList = helixClient.getFollowers(
                     authToken,
@@ -133,7 +131,7 @@ public class TwitchApi {
     }
 
     @Nullable
-    public Stream getStream() throws HystrixRuntimeException {
+    public Stream getStream(String streamer) throws HystrixRuntimeException {
         StreamList streamList = helixClient.getStreams(
                 authToken,
                 "",
