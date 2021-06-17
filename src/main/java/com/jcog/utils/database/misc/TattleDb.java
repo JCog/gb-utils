@@ -3,10 +3,12 @@ package com.jcog.utils.database.misc;
 import com.jcog.utils.database.GbCollection;
 import com.jcog.utils.database.GbDatabase;
 import com.jcog.utils.database.entries.TattleItem;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class TattleDb extends GbCollection {
@@ -55,5 +57,14 @@ public class TattleDb extends GbCollection {
         }
         Document tattle = iterator.next();
         return new TattleItem(tattle.getString(ID_KEY), tattle.getString(TATTLE_KEY));
+    }
+    
+    public ArrayList<TattleItem> getAllTattles() {
+        FindIterable<Document> documents = findAll();
+        ArrayList<TattleItem> tattles = new ArrayList<>();
+        for (Document document : documents) {
+            tattles.add(new TattleItem(document.getString(ID_KEY), document.getString(TATTLE_KEY)));
+        }
+        return tattles;
     }
 }
