@@ -1,11 +1,10 @@
 package com.jcog.utils;
 
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
+import com.github.twitch4j.eventsub.events.ChannelPredictionEvent;
 import com.github.twitch4j.pubsub.TwitchPubSub;
 import com.github.twitch4j.pubsub.TwitchPubSubBuilder;
-import com.github.twitch4j.pubsub.events.ChannelBitsEvent;
-import com.github.twitch4j.pubsub.events.ChannelSubGiftEvent;
-import com.github.twitch4j.pubsub.events.RewardRedeemedEvent;
+import com.github.twitch4j.pubsub.events.*;
 
 public abstract class TwitchPubSubClient {
     private final String streamerId;
@@ -36,6 +35,24 @@ public abstract class TwitchPubSubClient {
         return this;
     }
     
+    public TwitchPubSubClient listenForPredictions() {
+        client.listenForChannelPredictionsEvents(oAuth2Credential, streamerId);
+        client.getEventManager().onEvent(ChannelPredictionEvent.class, this::onPredictionsEvent);
+        return this;
+    }
+    
+    public TwitchPubSubClient listenForHypeTrainStart() {
+        client.listenForChannelPredictionsEvents(oAuth2Credential, streamerId);
+        client.getEventManager().onEvent(HypeTrainStartEvent.class, this::onHypeTrainStartEvent);
+        return this;
+    }
+    
+    public TwitchPubSubClient listenForHypeTrainEnd() {
+        client.listenForChannelPredictionsEvents(oAuth2Credential, streamerId);
+        client.getEventManager().onEvent(HypeTrainEndEvent.class, this::onHypeTrainEndEvent);
+        return this;
+    }
+    
     public void close() {
         client.close();
     }
@@ -45,4 +62,10 @@ public abstract class TwitchPubSubClient {
     public abstract void onChannelPointsEvent(RewardRedeemedEvent event);
 
     public abstract void onSubGiftsEvent(ChannelSubGiftEvent event);
+    
+    public abstract void onPredictionsEvent(ChannelPredictionEvent event);
+    
+    public abstract void onHypeTrainStartEvent(HypeTrainStartEvent event);
+    
+    public abstract void onHypeTrainEndEvent(HypeTrainEndEvent event);
 }
